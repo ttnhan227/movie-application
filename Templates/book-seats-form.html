@@ -21,13 +21,20 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            width: 400px;
-            padding: 50px;
-            transform: translate(-50%, -50%);
-            background: rgba(16, 15, 15, 0.5);
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            margin-left: -200px; /* half of max-width */
+            margin-top: -200px; /* approximate half of height */
+            background: rgba(226, 53, 157, 0.5);
             box-sizing: border-box;
-            box-shadow: 0 15px 25px rgba(80, 80, 80, 0.5);
+            box-shadow: 0 15px 25px rgba(226, 53, 157, 0.5);
             border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .login-box:hover {
+            transform: scale(1.02);
         }
 
         .login-box h2 {
@@ -103,7 +110,13 @@
             color: #fff;
             padding: 8px;
             font-size: 20px;
-            cursor: pointer; /* Pointer/hand icon */
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: crimson;
+            transform: translateY(-2px);
         }
 
         .movie-details-box {
@@ -162,7 +175,17 @@
 
         #movie-category-display ul li {
             cursor: pointer;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
+            padding: 6px 12px;
+            background: rgba(139, 0, 0, 0.7);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+
+        #movie-category-display ul li:hover {
+            background: rgba(238, 7, 84, 0.7);
+            transform: translateX(10px);
         }
 
         .container {
@@ -187,13 +210,30 @@
             padding: 20px;
             border-radius: 10px;
             z-index: 2;
-            min-width: 300px;
+            min-width: 280px;
+            max-width: 400px;
             box-shadow: 0 0 20px rgba(238, 7, 84, 0.3);
         }
 
         .popup-content {
             position: relative;
             color: white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.5;
+            font-size: 0.95em;
+        }
+
+        .popup-content strong {
+            color: #ee0754;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .popup-content div {
+            margin-bottom: 8px;
+            padding: 6px;
+            border-bottom: 1px solid rgba(238, 7, 84, 0.2);
         }
 
         .close-button {
@@ -212,6 +252,23 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .close-button:hover {
+            background: white;
+            color: #ee0754;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+            .login-box {
+                width: 90%;
+            }
+
+            .button {
+                font-size: 18px;
+            }
         }
     </style>
 </head>
