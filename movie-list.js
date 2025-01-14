@@ -88,6 +88,25 @@ passport.deserializeUser(function (id, done) {
     done(null, user);
 });
 
+// Add registration functions
+function registerUser(username, password) {
+    // Check if username already exists
+    const existingUser = users.find(u => u.username === username);
+    if (existingUser) {
+        return false;
+    }
+    
+    // Create new user with incremented ID
+    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
+    const newUser = {
+        id: newId,
+        username: username,
+        password: password
+    };
+    users.push(newUser);
+    return true;
+}
+
 async function main() {
     try {
         await client.connect();
@@ -207,14 +226,16 @@ async function main() {
         });
 
         app.get("/get-movie-details", async (req, res) => {
-            const movieName = req.query.name; // Get the selected movie name from query parameters
+            const movieName = req.query.name;
             try {
-                // Fetch movie details based on the selected movie name from the database
                 const movie = await collection.findOne({ "Movie name": movieName });
                 if (movie) {
                     res.status(200).json({
                         Description: movie["Description"],
                         Actors: movie["Actors"],
+                        AvailableSeats: movie["Available Seats"],
+                        ShowTime: movie["Show time"],
+                        ScreenNo: movie["Screen no"]
                     });
                 } else {
                     res.status(404).json({ error: "Movie not found" });
@@ -372,6 +393,36 @@ async function main() {
         app.get("/logout", function (req, res) {
             console.log("Logout page activated.");
             res.sendFile(__dirname + "/Templates/wonderland.html");
+        });
+
+        // User registration route
+        app.get("/views/register.ejs", function (req, res) {
+            console.log("Entered into user registration page");
+            res.render("register");
+        });
+
+        // User registration form handler
+        app.post("/register", function (req, res) {
+            const { username, password } = req.body;
+            
+            if (registerUser(username, password)) {
+                res.send('<script>alert("Registration successful! Please login."); window.location.href = "/views/login.ejs";</script>');
+            } else {
+                res.send('<script>alert("Username already exists!"); window.location.href = "/views/register.ejs";</script>');
+            }
+        });
+
+        // Admin registration route 
+        app.get("/views/admin-register.ejs", function (req, res) {
+            console.log("Entered into admin registration page");
+            res.render("admin-register");
+        });
+
+        // Admin registration form handler
+        app.post("/admin-register", function (req, res) {
+            const { username, password } = req.body;
+            // For demo purposes, you might want to implement proper admin registration logic
+            res.send('<script>alert("Admin registration is restricted. Please contact system administrator."); window.location.href = "/";</script>');
         });
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);

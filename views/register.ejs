@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guest Login</title>
+    <title>Guest Registration</title>
     <style>
         html {
             height: 100%;
@@ -62,7 +62,7 @@
             top: 0;
             left: 0;
             padding: 10px 0;
-            font-size: 20px; /* Adjust the font size here */
+            font-size: 20px;
             color: #fff;
             pointer-events: none;
             transition: 0.5s;
@@ -72,7 +72,7 @@
         .user-box input:valid ~ label,
         .user-box input:not(:placeholder-shown) ~ label {
             top: -20px;
-            font-size: 16px; /* Adjust the font size here */
+            font-size: 16px;
             color: #520340;
         }
 
@@ -98,30 +98,41 @@
             background: #fff;
             color: #520340;
         }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+            color: #fff;
+        }
+
+        .login-link a {
+            color: #520340;
+            text-decoration: none;
+            font-weight: bold;
+        }
     </style>
 </head>
 
 <body>
     <div class="center-container">
         <div class="login-box">
-            <h2>Guest Login</h2>
-            <!-- Add a form for guest login -->
-            <form id="loginForm" action="/user-local" method="POST">
+            <h2>Guest Registration</h2>
+            <form id="registerForm" action="/register" method="POST">
                 <div class="user-box">
                     <input type="text" id="username" name="username" required>
                     <label for="username">Username</label>
                 </div>
                 <div class="user-box">
                     <input type="password" id="password" name="password" required>
-                    <label for="password">Password:</label>
+                    <label for="password">Password</label>
                 </div>
-                <button type="submit" class="login-box-button">Login</button>
+                <button type="submit" class="login-box-button">Register</button>
             </form>
             <div class="login-link">
-                Don't have an account? <a href="/views/register.ejs">Register here</a>
+                Already have an account? <a href="/views/login.ejs">Login here</a>
             </div>
         </div>
     </div>
 </body>
 
-</html>
+</html> 

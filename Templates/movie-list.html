@@ -52,7 +52,16 @@
         color: white;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-        display: none; /* Initially hide the box */
+        display: none;
+        line-height: 1.6;
+    }
+
+    .movie-details-box div {
+        margin-bottom: 8px;
+    }
+
+    .movie-details-box strong {
+        color: #ee0754;
     }
 
     .movie-category-box {
@@ -189,10 +198,17 @@
         if (details) {
             const description = details["Description"];
             const actors = details["Actors"];
+            const availableSeats = details["AvailableSeats"];
+            const showTime = details["ShowTime"];
+            const screenNo = details["ScreenNo"];
+            
             const detailsText = `
                 <div><strong>Movie Name:</strong> ${movieName}</div>
                 <div><strong>Description:</strong> ${description}</div>
                 <div><strong>Actors:</strong> ${actors}</div>
+                <div><strong>Available Seats:</strong> ${availableSeats}</div>
+                <div><strong>Show Time:</strong> ${showTime}</div>
+                <div><strong>Screen No:</strong> ${screenNo}</div>
             `;
             movieDetailsDiv.innerHTML = detailsText;
             movieDetailsDiv.style.display = "block";
