@@ -6,6 +6,7 @@ const passport = require("passport");
 const mongoose = require('mongoose');
 const LocalStrategy = require("passport-local");
 const path = require("path");
+const MongoStore = require('connect-mongo');
 require('dotenv').config();
 
 // MongoDB connection string - use either Atlas or local
@@ -18,9 +19,18 @@ app.set("view engine", "ejs");
 // Use session middleware
 app.use(
     session({
-        secret: "abc",
+        secret: process.env.SESSION_SECRET || "abc",
         resave: false,
-        saveUninitialized: true,
+        saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: uri,
+            collectionName: 'sessions',
+            ttl: 24 * 60 * 60 // 1 day in seconds
+        }),
+        cookie: {
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000 // 1 day in milliseconds
+        }
     })
 );
 app.use(bodyParser.urlencoded({extended: false}));
