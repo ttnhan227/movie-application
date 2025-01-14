@@ -176,6 +176,43 @@
             font-size: 20px;
             cursor: pointer;
         }
+
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.95);
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 2;
+            min-width: 300px;
+            box-shadow: 0 0 20px rgba(238, 7, 84, 0.3);
+        }
+
+        .popup-content {
+            position: relative;
+            color: white;
+        }
+
+        .close-button {
+            z-index: 3;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background: #ee0754;
+            border: none;
+            color: white;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -311,16 +348,29 @@
             const showTime = details["ShowTime"];
             const screenNo = details["ScreenNo"];
             
+            movieDetailsDiv.className = 'popup';
             const detailsText = `
-                <div><strong>Movie Name:</strong> ${movieName}</div>
-                <div><strong>Description:</strong> ${description}</div>
-                <div><strong>Actors:</strong> ${actors}</div>
-                <div><strong>Available Seats:</strong> ${availableSeats}</div>
-                <div><strong>Show Time:</strong> ${showTime}</div>
-                <div><strong>Screen No:</strong> ${screenNo}</div>
+                <div class="popup-content">
+                    <button class="close-button" onclick="closePopup()">×</button>
+                    <div><strong>Movie Name:</strong> ${movieName}</div>
+                    <div><strong>Description:</strong> ${description}</div>
+                    <div><strong>Actors:</strong> ${actors}</div>
+                    <div><strong>Available Seats:</strong> ${availableSeats}</div>
+                    <div><strong>Show Time:</strong> ${showTime}</div>
+                    <div><strong>Screen No:</strong> ${screenNo}</div>
+                </div>
             `;
             movieDetailsDiv.innerHTML = detailsText;
-            movieDetailsDiv.style.display = "block";
+            
+            movieDetailsDiv.style.display = 'block';
+        }
+    }
+
+    function closePopup() {
+        const movieDetailsDiv = document.getElementById("moviedetails1");
+        if (movieDetailsDiv) {
+            movieDetailsDiv.style.display = 'none';
+            movieDetailsDiv.className = 'movie-details-box';
         }
     }
 
