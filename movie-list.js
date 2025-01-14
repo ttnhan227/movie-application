@@ -6,9 +6,10 @@ const passport = require("passport");
 const mongoose = require('mongoose');
 const LocalStrategy = require("passport-local");
 const path = require("path");
+require('dotenv').config();
 
 // MongoDB connection string - use either Atlas or local
-const uri = 'mongodb+srv://ttnhan227:1q70t7FLugWjNtSB@cluster0.fjlnn.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
 
 const app = express();
