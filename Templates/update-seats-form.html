@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>Update Seats</title>
     <style>
         /* Height of the HTML document */
@@ -52,7 +52,8 @@
         }
 
         /* User input */
-        .login-box .user-box input {}
+        .login-box .user-box input {
+        }
 
         /* Label above the user input */
         .login-box .user-box label {
@@ -60,75 +61,79 @@
         }
 
         /* Button styling */
-        .login-box-button {}
+        .login-box-button {
+        }
 
         /* Hover effect for the button */
-        .login-box-button:hover {}
+        .login-box-button:hover {
+        }
     </style>
 </head>
 
 <body>
-    <div class="center-container">
-        <div class="login-box">
-            <h1>Update Seats</h1>
-            <form id="seats-form" action="/update-seats" method="POST">
-                <!-- Dropdown for selecting a movie -->
-                <div class="user-box">
-                    <select id="movie-category" name="Movie name">
-                        <option value="">Select a movie</option>
-                    </select>
-                </div>
-                <br /><br />
-                <!-- Input for entering new available seats -->
-                <div class="user-box">
-                    <input type="number" id="available-seats" name="Available Seats" required="" />
-                    <label>New Available Seats</label>
-                </div>
-                <!-- Submit button -->
-                <button type="submit" class="login-box-button">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    Submit
-                </button>
-            </form>
-        </div>
+<div class="center-container">
+    <div class="login-box">
+        <h1>Update Seats</h1>
+        <form action="/update-seats" id="seats-form" method="POST">
+            <!-- Dropdown for selecting a movie -->
+            <div class="user-box">
+                <select id="movie-category" name="Movie name">
+                    <option value="">Select a movie</option>
+                </select>
+            </div>
+            <br/><br/>
+            <!-- Input for entering new available seats -->
+            <div class="user-box">
+                <input id="available-seats" name="Available Seats" required="" type="number"/>
+                <label>New Available Seats</label>
+            </div>
+            <!-- Submit button -->
+            <button class="login-box-button" type="submit">
+                <span></span>
+                <span></span>
+                <span></span>
+                <span></span>
+                Submit
+            </button>
+        </form>
     </div>
-    <script>
-        // Function to fetch movie name from database
-        async function getMovieList() {
-            const movieCategoryDiv = document.getElementById("movie-category");
-            try {
-                const response = await fetch(`/get-all-movies`);
-                const data = await response.json();
-                displayMovieList(data);
-            } catch (error) {
-                console.error("Error fetching movies:", error);
-            }
+</div>
+<script>
+    // Function to fetch movie name from database
+    async function getMovieList() {
+        const movieCategoryDiv = document.getElementById("movie-category");
+        try {
+            const response = await fetch(`/get-all-movies`);
+            const data = await response.json();
+            displayMovieList(data);
+        } catch (error) {
+            console.error("Error fetching movies:", error);
         }
-        // Function to display the list of movie names
-        // in the dropdown
-        function displayMovieList(movies) {
-            const movieCategoryDiv = document.getElementById("movie-category");
-            if (movies.length === 0) {
-                movieCategoryDiv.textContent = "No movies found";
-            } else {
-                movies.forEach((movie) => {
-                    let option = document.createElement("option");
-                    option.setAttribute("value", movie["Movie name"]);
-                    let optionText = document.createTextNode(movie["Movie name"]);
-                    option.appendChild(optionText);
-                    movieCategoryDiv.appendChild(option);
-                });
-                movieCategoryDiv.style.display = "block";
-                // Show the box when movies are available
-            }
+    }
+
+    // Function to display the list of movie names
+    // in the dropdown
+    function displayMovieList(movies) {
+        const movieCategoryDiv = document.getElementById("movie-category");
+        if (movies.length === 0) {
+            movieCategoryDiv.textContent = "No movies found";
+        } else {
+            movies.forEach((movie) => {
+                let option = document.createElement("option");
+                option.setAttribute("value", movie["Movie name"]);
+                let optionText = document.createTextNode(movie["Movie name"]);
+                option.appendChild(optionText);
+                movieCategoryDiv.appendChild(option);
+            });
+            movieCategoryDiv.style.display = "block";
+            // Show the box when movies are available
         }
-        // Call the function to fetch movies when
-        // the page loads
-        document.addEventListener("DOMContentLoaded", getMovieList);
-    </script>
+    }
+
+    // Call the function to fetch movies when
+    // the page loads
+    document.addEventListener("DOMContentLoaded", getMovieList);
+</script>
 </body>
 
 </html>
