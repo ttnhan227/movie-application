@@ -8,10 +8,15 @@ const LocalStrategy = require("passport-local");
 const path = require("path");
 const MongoStore = require('connect-mongo');
 require('dotenv').config();
+const User = require('./models/User');
 
 // MongoDB connection string - use either Atlas or local
 const uri = process.env.MONGODB_URI;
 const client = new MongoClient(uri);
+
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => console.log('Mongoose connected'))
+    .catch(err => console.error('Mongoose connection error:', err));
 
 const app = express();
 app.set("view engine", "ejs");
@@ -69,53 +74,60 @@ passport.deserializeUser(function (user, done) {
     done(null, user);
 });
 
-// Add the User name and the password for the guest login
-const users = [
-    {id: 1, username: "abc", password: "123"},
-    {id: 2, username: "user1", password: "user"},
-];
+// Update the registration function
+async function registerUser(username, password) {
+    try {
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return false;
+        }
+        
+        const newUser = new User({
+            username,
+            password, // Note: In production, hash the password!
+            role: 'user'
+        });
+        
+        await newUser.save();
+        return true;
+    } catch (error) {
+        console.error('Error registering user:', error);
+        return false;
+    }
+}
 
+// Update the user-local strategy
 passport.use(
     "user-local",
-    new LocalStrategy(function (username, password, done) {
-        const user = users.find((u) => u.username === username);
-        if (!user) {
-            return done(null, false, { message: "Incorrect username" });
+    new LocalStrategy(async function (username, password, done) {
+        try {
+            const user = await User.findOne({ username });
+            if (!user) {
+                return done(null, false, { message: "Incorrect username" });
+            }
+            if (user.password !== password) { // In production, compare hashed passwords!
+                return done(null, false, { message: "Incorrect password" });
+            }
+            return done(null, user);
+        } catch (error) {
+            return done(error);
         }
-        if (user.password !== password) {
-            return done(null, false, { message: "Incorrect password" });
-        }
-        return done(null, user);
     })
 );
 
+// Update serialize/deserialize functions
 passport.serializeUser(function (user, done) {
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    const user = users.find((u) => u.id === id);
-    done(null, user);
-});
-
-// Add registration functions
-function registerUser(username, password) {
-    // Check if username already exists
-    const existingUser = users.find(u => u.username === username);
-    if (existingUser) {
-        return false;
+passport.deserializeUser(async function (id, done) {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (error) {
+        done(error);
     }
-    
-    // Create new user with incremented ID
-    const newId = users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1;
-    const newUser = {
-        id: newId,
-        username: username,
-        password: password
-    };
-    users.push(newUser);
-    return true;
-}
+});
 
 async function main() {
     try {
